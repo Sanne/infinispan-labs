@@ -8,13 +8,13 @@ public interface TicketService {
 
 	public List<Ticket> getReservedTickets();
 
-	public void clearAllocations();
+	public void clearReservations();
 
 	public void bookTicket(String id);
 
 	public String getNodeId();
 
-	public String getOwners(String id);
+	public String getOwners(String id, String event);
 
 	/**
 	 * @param eventName

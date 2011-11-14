@@ -85,26 +85,14 @@
             <br/>
             <br/>
          </h:form>
-         <h2>Query</h2>
-         <h:form id="query">
-            <h4><h:outputText value="Id"/></h4>
-            <h:messages id="idErrors" errorClass="error"/>
-            <h:inputText id="id" value="#{viewController.id}" label="Id" required="true"/>
-            <h:commandButton value="Query" action="#{viewController.query}">
-               <f:ajax execute="id" render="idErrors allocatedTicket"/>
-            </h:commandButton>
-            <h3>Ticket Allocation</h3>
-               <h:outputText id="allocatedTicket" value="#{viewController.allocatedTicket}" />
-            <br/>
-            <br/>     
-         </h:form>
+
          <h:form id="tickets">
             <h2>
                <h:outputText id="numberOfAllocations" value="Number Of Allocations - #{numberOfReservedTickets}"/>
                <h:commandButton value="Refresh">
                   <f:ajax immediate="true" render="@all"/>
                </h:commandButton>
-               <h:commandButton value="Clear cache" action="#{viewController.clearAllocations}">
+               <h:commandButton value="Clear cache" action="#{viewController.clearReservations}">
                   <f:ajax immediate="true" render="numberOfAllocations allocatedTickets"/>
                </h:commandButton>
             </h2>
@@ -117,15 +105,20 @@
                </h:column>
                <h:column>
                   <f:facet name="header">
-                     Owners
+                     Ticket Id
                   </f:facet>
-                  <h:outputText value="#{viewController.getOwners(t.id)}"/>
+                  <h:outputText value="#{t.id}"/>
                </h:column>
                <h:column>
                   <f:facet name="header">
-                     
+                     Owners
                   </f:facet>
-                  <h:commandButton value="Book" action="#{viewController.book(t.id)}" />
+                  <h:outputText value="#{viewController.getOwners(t.id, t.event)}"/>
+               </h:column>
+               <h:column>
+                  <f:facet name="header">
+                  </f:facet>
+                  <h:commandButton value="Pay" action="#{viewController.book(t.id)}" />
                </h:column>
             </h:dataTable>
          

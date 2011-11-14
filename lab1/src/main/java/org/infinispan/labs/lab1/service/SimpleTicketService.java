@@ -51,11 +51,14 @@ public class SimpleTicketService implements TicketService {
 	}
 
 	public List<Ticket> getReservedTickets() {
-		return new ArrayList( tickets.keySet() );
+		return new ArrayList( reservedTickets.keySet() );
 	}
 
-	public void clearAllocations() {
-		tickets.clear();
+	public void clearReservations() {
+		for ( Ticket reservedTicket : reservedTickets.keySet() ) {
+			tickets.put( reservedTicket, new TicketState( "available" ) );
+		}
+		reservedTickets.clear();
 	}
 
 	public void bookTicket(String id) {
@@ -66,8 +69,15 @@ public class SimpleTicketService implements TicketService {
 		return "local";
 	}
 
-	public String getOwners(String key) {
-		return "local";
+	public String getOwners(String ticketId, String event) {
+		Ticket ticket = new Ticket( ticketId, event );
+		String owner = reservedTickets.get( ticket );
+		if ( owner == null) {
+			return " - available - ";
+		}
+		else {
+			return owner;
+		}
 	}
 
 	@Override
@@ -80,6 +90,10 @@ public class SimpleTicketService implements TicketService {
 	@Override
 	public void reserveTicket(String name, String ticketId, String event) {
 		Ticket ticket = new Ticket( ticketId, event );
+		TicketState ticketState = tickets.get( ticket );
+		if ( ticketState == null ) {
+			throw new IllegalStateException( "ticket not existing" );
+		}
 		tickets.put( ticket, new TicketState( "reserved" ) );
 		reservedTickets.put( ticket, name );
 	}

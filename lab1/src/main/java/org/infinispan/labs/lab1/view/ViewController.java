@@ -73,16 +73,16 @@ public class ViewController {
 		service.reserveTicket( name, ticketId, event );
 	}
 
-	public void clearAllocations() {
-		service.clearAllocations();
+	public void clearReservations() {
+		service.clearReservations();
 	}
 
 	public String getNodeId() {
 		return service.getNodeId();
 	}
 
-	public String getOwners(String key) {
-		return service.getOwners( key );
+	public String getOwners(String id, String event) {
+		return service.getOwners( id, event );
 	}
 
 	public void query() {
