@@ -6,13 +6,10 @@ import java.io.Serializable;
  * Model object which shows allocation of ticket to user
  * 
  * @author Pete Muir
- *
  */
 public class TicketAllocation implements Serializable {
    
-   private static final long serialVersionUID = 2047001724391620471L;
-
-   // The name of the person the ticket is alloacted to
+   // The name of the person the ticket is allocated to
    private String allocatedTo;
    
    // The name of the event the ticket is for

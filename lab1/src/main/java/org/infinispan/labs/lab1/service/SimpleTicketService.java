@@ -23,68 +23,66 @@
 package org.infinispan.labs.lab1.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.infinispan.labs.lab1.TicketPopulator;
-import org.infinispan.labs.lab1.model.TicketAllocation;
+import org.infinispan.labs.lab1.model.Ticket;
+import org.infinispan.labs.lab1.model.TicketState;
 
-/**
- * <p>
- * The ticket allocator.
- * </p>
- * 
- * <p>
- * Facade over the ticket allocation backend.
- * </p>
- * 
- * @author Pete Muir
- */
 @Named
 @ApplicationScoped
 public class SimpleTicketService implements TicketService {
 
-   private final List<TicketAllocation> tickets = new ArrayList<TicketAllocation>();
+	private final Map<Ticket, TicketState> tickets = new HashMap<Ticket, TicketState>();
 
-   @Inject
-   public void populate(TicketPopulator populator) {
-      populator.populate();
-   }
+	/**
+	 * value is the name of the person the ticket is assigned to
+	 */
+	private final Map<Ticket, String> reservedTickets = new HashMap<Ticket, String>();
 
-   public void allocateTicket(String allocatedTo, String event) {
-      tickets.add(new TicketAllocation(allocatedTo, event));
-   }
+	@Inject
+	public void populate(TicketPopulator populator) {
+		populator.populate();
+	}
 
-   public List<TicketAllocation> getAllocatedTickets() {
-      return tickets;
-   }
-   
-   public void clearAllocations() {
-      tickets.clear();
-   }
-   
-   public void bookTicket(String id) {
-      throw new UnsupportedOperationException();
-   }
+	public List<Ticket> getReservedTickets() {
+		return new ArrayList( tickets.keySet() );
+	}
 
-   public String getNodeId() {
-      return "local";
-   }
+	public void clearAllocations() {
+		tickets.clear();
+	}
 
-   public String getOwners(String key) {
-      return "local";
-   }
-   
-   public TicketAllocation getTicketAllocation(String id) {
-      for (TicketAllocation allocation : tickets) {
-         if (allocation.getId().equals(id)) {
-            return allocation;
-         }
-      } 
-      return null;
-   }
+	public void bookTicket(String id) {
+		throw new UnsupportedOperationException();
+	}
+
+	public String getNodeId() {
+		return "local";
+	}
+
+	public String getOwners(String key) {
+		return "local";
+	}
+
+	@Override
+	public void createEvent(String eventName, int numberOfTickets) {
+		for ( int i = 0; i < numberOfTickets; i++ ) {
+			tickets.put( new Ticket( String.valueOf( i ), eventName ), new TicketState( "available" ) );
+		}
+	}
+
+	@Override
+	public void reserveTicket(String name, String ticketId, String event) {
+		Ticket ticket = new Ticket( ticketId, event );
+		tickets.put( ticket, new TicketState( "reserved" ) );
+		reservedTickets.put( ticket, name );
+	}
 
 }

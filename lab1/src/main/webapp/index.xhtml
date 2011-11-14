@@ -51,19 +51,22 @@
       </div>
 
       <div id="content">
-         <h2>Allocate</h2>
-         <h:form id="allocate">
-            <h4><h:outputText value="Name"/></h4>
+         <h2>Reserve ticket</h2>
+         <h:form id="reserve">
+            <h4><h:outputText value="Buyers Name"/></h4>
             <h:messages id="nameErrors" errorClass="error"/>
             <h:inputText id="name" value="#{viewController.name}" label="Name" required="true"/>
             <h4><h:outputText value="Event"/></h4>
             <h:messages id="eventErrors" errorClass="error"/>
-            <h:inputText id="event" value="#{viewController.eventName}" label="Event" required="true"/>
-            <h:commandButton value="Allocate" action="#{viewController.allocate}">
+            <h:inputText id="name" value="#{viewController.event}" label="Event" required="true"/>
+            <h4><h:outputText value="Ticked id"/></h4>
+            <h:messages id="ticketIdErrors" errorClass="error"/>
+            <h:inputText id="ticketId" value="#{viewController.ticketId}" label="Event" required="true"/>
+            <h:commandButton value="Proceed to checkout" action="#{viewController.allocate}">
                <f:ajax execute="name event" render="nameErrors eventErrors :tickets:numberOfAllocations :tickets:allocatedTickets"/>
             </h:commandButton>
             <br/>
-            <br/>            
+            <br/>
          </h:form>
          <h2>Query</h2>
          <h:form id="query">
@@ -80,7 +83,7 @@
          </h:form>
          <h:form id="tickets">
             <h2>
-               <h:outputText id="numberOfAllocations" value="Number Of Allocations - #{numberOfAllocatedTickets}"/>
+               <h:outputText id="numberOfAllocations" value="Number Of Allocations - #{numberOfReservedTickets}"/>
                <h:commandButton value="Refresh">
                   <f:ajax immediate="true" render="@all"/>
                </h:commandButton>
@@ -88,7 +91,7 @@
                   <f:ajax immediate="true" render="numberOfAllocations allocatedTickets"/>
                </h:commandButton>
             </h2>
-            <h:dataTable id="allocatedTickets" value="#{allocatedTickets}" var="t">
+            <h:dataTable id="allocatedTickets" value="#{reservedTickets}" var="t">
                <h:column>
                   <f:facet name="header">
                      Event
