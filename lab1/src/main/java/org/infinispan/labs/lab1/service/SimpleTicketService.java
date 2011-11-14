@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -43,7 +45,7 @@ public class SimpleTicketService implements TicketService {
 	/**
 	 * value is the name of the person the ticket is assigned to
 	 */
-	private final Map<Ticket, String> reservedTickets = new HashMap<Ticket, String>();
+	private final ConcurrentMap<Ticket, String> reservedTickets = new ConcurrentHashMap<Ticket, String>();
 
 	@PostConstruct
 	public void populate() {
@@ -94,8 +96,13 @@ public class SimpleTicketService implements TicketService {
 		if ( ticketState == null ) {
 			throw new IllegalStateException( "ticket not existing" );
 		}
-		tickets.put( ticket, new TicketState( "reserved" ) );
-		reservedTickets.put( ticket, name );
+		String ok = reservedTickets.putIfAbsent( ticket, name );
+		if ( ok == null ) {
+			tickets.put( ticket, new TicketState( "reserved" ) );
+		}
+		else {
+			//abort
+		}
 	}
 
 	@Override
