@@ -9,5 +9,9 @@ public class TicketState implements Serializable {
 	public TicketState(String state) {
 		this.state = state;
 	}
-
+	
+	public String getState() {
+		return state;
+	}
+	
 }

@@ -27,11 +27,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.infinispan.labs.lab1.TicketPopulator;
 import org.infinispan.labs.lab1.model.Ticket;
 import org.infinispan.labs.lab1.model.TicketState;
 
@@ -46,9 +45,9 @@ public class SimpleTicketService implements TicketService {
 	 */
 	private final Map<Ticket, String> reservedTickets = new HashMap<Ticket, String>();
 
-	@Inject
-	public void populate(TicketPopulator populator) {
-		populator.populate();
+	@PostConstruct
+	public void populate() {
+		createEvent("Devoxx", 8);
 	}
 
 	public List<Ticket> getReservedTickets() {
@@ -83,6 +82,18 @@ public class SimpleTicketService implements TicketService {
 		Ticket ticket = new Ticket( ticketId, event );
 		tickets.put( ticket, new TicketState( "reserved" ) );
 		reservedTickets.put( ticket, name );
+	}
+
+	@Override
+	public List<Ticket> getAvailableTickets() {
+		ArrayList<Ticket> list = new ArrayList<Ticket>();
+		for ( Ticket ticket : tickets.keySet() ) {
+			TicketState ticketState = tickets.get( ticket );
+			if ( "available".equals( ticketState.getState() ) ) {
+				list.add( ticket );
+			}
+		}
+		return list;
 	}
 
 }

@@ -7,9 +7,22 @@ public class Ticket implements Serializable {
 	final String id;
 	final String event;
 	
+	public Ticket() {
+		id = "";
+		event = "";
+	}
+	
 	public Ticket(String id, String event) {
 		this.id = id;
 		this.event = event;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public String getEvent() {
+		return event;
 	}
 
 	@Override

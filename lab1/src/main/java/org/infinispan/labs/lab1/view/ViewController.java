@@ -52,6 +52,12 @@ public class ViewController {
 	public List<Ticket> getReservedTickets() {
 		return service.getReservedTickets();
 	}
+	
+	@Produces
+	@Named
+	public List<Ticket> getAvailableTickets() {
+		return service.getAvailableTickets();
+	}
 
 	@Produces
 	@Named

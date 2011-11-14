@@ -28,4 +28,10 @@ public interface TicketService {
 	 * @param event
 	 */
 	void reserveTicket(String name, String ticketId, String event);
+
+	/**
+	 * @return
+	 */
+	public List<Ticket> getAvailableTickets();
+
 }

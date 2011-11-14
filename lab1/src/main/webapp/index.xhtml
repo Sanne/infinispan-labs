@@ -51,6 +51,23 @@
       </div>
 
       <div id="content">
+      <h:form id="availableTicketsForm">
+     	<h:dataTable id="availableTickets" value="#{availableTickets}" var="t">
+               <h:column>
+                  <f:facet name="header">
+                     Event
+                  </f:facet>
+                  <h:outputText value="#{t.event}"/>
+               </h:column>
+               <h:column>
+                  <f:facet name="header">
+                     Ticket Id
+                  </f:facet>
+                  <h:outputText value="#{t.id}"/>
+               </h:column>
+            </h:dataTable>
+            </h:form>
+            
          <h2>Reserve ticket</h2>
          <h:form id="reserve">
             <h4><h:outputText value="Buyers Name"/></h4>
@@ -58,12 +75,12 @@
             <h:inputText id="name" value="#{viewController.name}" label="Name" required="true"/>
             <h4><h:outputText value="Event"/></h4>
             <h:messages id="eventErrors" errorClass="error"/>
-            <h:inputText id="name" value="#{viewController.event}" label="Event" required="true"/>
+            <h:inputText id="event" value="#{viewController.event}" label="Event" required="true"/>
             <h4><h:outputText value="Ticked id"/></h4>
             <h:messages id="ticketIdErrors" errorClass="error"/>
-            <h:inputText id="ticketId" value="#{viewController.ticketId}" label="Event" required="true"/>
-            <h:commandButton value="Proceed to checkout" action="#{viewController.allocate}">
-               <f:ajax execute="name event" render="nameErrors eventErrors :tickets:numberOfAllocations :tickets:allocatedTickets"/>
+            <h:inputText id="ticketId" value="#{viewController.ticketId}" label="Ticket Id" required="true"/>
+            <h:commandButton value="Proceed to checkout" action="#{viewController.reserve}">
+               <f:ajax execute="name event ticketId" render=":availableTicketsForm:availableTickets nameErrors eventErrors :tickets:numberOfAllocations :tickets:allocatedTickets"/>
             </h:commandButton>
             <br/>
             <br/>
@@ -97,12 +114,6 @@
                      Event
                   </f:facet>
                   <h:outputText value="#{t.event}"/>
-               </h:column>
-               <h:column>
-                  <f:facet name="header">
-                     Allocated To
-                  </f:facet>
-                  <h:outputText value="#{t.allocatedTo}"/>
                </h:column>
                <h:column>
                   <f:facet name="header">
